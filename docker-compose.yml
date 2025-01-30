@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  learning_base:
+    image: learningbase_salaryprediction
+    volumes:
+      - ai_system:/tmp
+    restart: always
+
+  activation_base:
+    image: activationbase_salaryprediction
+    volumes:
+      - ai_system:/tmp
+    restart: always
+
+volumes:
+  ai_system:

@@ -1,0 +1,12 @@
+# Use busybox as the base image
+FROM busybox
+
+# Create the necessary directories inside the container
+RUN mkdir -p /tmp/learningBase/train /tmp/learningBase/validation
+
+# Copy the CSV files into the container
+COPY ../data/training_data.csv /tmp/learningBase/train/
+COPY ../data/test_data.csv /tmp/learningBase/validation/
+
+# Copy the README.md for documentation
+COPY README.md /tmp/learningBase/README.md
