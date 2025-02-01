@@ -1,0 +1,5 @@
+Final Train Loss: 0.00440853601321578
+Final Train MAE: 0.05123276263475418
+Final Validation Loss: 0.006081137340515852
+Final Validation MAE: 0.05833425372838974
+Total Epochs: 100

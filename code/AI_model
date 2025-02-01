@@ -1,0 +1,115 @@
+import os
+import pandas as pd
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+import seaborn as sns
+import scipy.stats as stats
+from sklearn.preprocessing import StandardScaler
+from tensorflow import keras
+from statsmodels.graphics.gofplots import qqplot
+
+TRAIN_PATH = "/Users/kahirakalbhor/Documents/aibas/AIBAS-SalaryPrediction/data/training_data.csv"
+TEST_PATH = "/Users/kahirakalbhor/Documents/aibas/AIBAS-SalaryPrediction/data/test_data.csv"
+OUTPUT_DIR = "/Users/kahirakalbhor/Documents/aibas/AIBAS-SalaryPrediction/documentation"
+
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+train_df = pd.read_csv(TRAIN_PATH)
+test_df = pd.read_csv(TEST_PATH)
+
+X_train = train_df.drop('Salary',axis=1)
+Y_train = train_df['Salary']
+
+X_test = test_df.drop('Salary',axis=1)
+Y_test = test_df['Salary']
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Define improved model
+model = keras.Sequential([
+    keras.layers.Dense(128, activation='relu', input_shape=(X_train.shape[1],)),
+    keras.layers.Dropout(0.2),
+    keras.layers.Dense(64, activation='relu'),
+    keras.layers.Dropout(0.2),
+    keras.layers.Dense(32, activation='relu'),
+    keras.layers.Dense(1, activation='linear')
+])
+
+# Compile model
+model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001), loss='mse', metrics=['mae'])
+
+# Train model
+history = model.fit(X_train, Y_train, epochs=100, validation_data=(X_test, Y_test), batch_size=32, verbose=1)
+
+model.save(os.path.join(OUTPUT_DIR, "currentAiSolution.keras"))
+
+final_train_loss = history.history['loss'][-1]
+final_train_mae = history.history['mae'][-1]
+final_val_loss = history.history['val_loss'][-1]
+final_val_mae = history.history['val_mae'][-1]
+
+with open(os.path.join(OUTPUT_DIR, "training_log.txt"), "w") as f:
+    f.write(f"Final Train Loss: {final_train_loss}\n")
+    f.write(f"Final Train MAE: {final_train_mae}\n")
+    f.write(f"Final Validation Loss: {final_val_loss}\n")
+    f.write(f"Final Validation MAE: {final_val_mae}\n")
+    f.write(f"Total Epochs: {len(history.history['loss'])}\n")
+
+# Plot loss curves
+plt.figure(figsize=(10,5))
+plt.plot(history.history['loss'], label='Train Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.title('Training vs Validation Loss')
+plt.savefig(os.path.join(OUTPUT_DIR, "loss_curve.png"))
+plt.show()
+
+# Scatter plot for predictions
+y_pred = model.predict(X_test).flatten()
+plt.figure(figsize=(8,6))
+sns.regplot(x=Y_test, y=y_pred,line_kws={'color': 'red'})
+plt.xlabel('Actual Salary')
+plt.ylabel('Predicted Salary')
+plt.title('Actual vs Predicted Salary')
+plt.savefig(os.path.join(OUTPUT_DIR, "scatter_plot.png"))
+plt.show()
+
+# Compute residuals
+residuals = Y_test - y_pred
+standardized_residuals = (residuals - np.mean(residuals)) / np.std(residuals)
+sqrt_std_resid = np.sqrt(np.abs(standardized_residuals))
+leverage = np.sum((X_test - np.mean(X_test, axis=0))**2, axis=1)
+
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+# Residual vs Fitted values
+sns.scatterplot(x=y_pred, y=residuals, ax=axes[0, 0])
+axes[0, 0].axhline(0, linestyle='--', color='red')
+axes[0, 0].set_xlabel('Fitted Values')
+axes[0, 0].set_ylabel('Residuals')
+axes[0, 0].set_title('Residuals vs Fitted Values')
+
+# Standardized Residuals vs Theoretical Quantiles (Q-Q Plot)
+qqplot(standardized_residuals, line='s', ax=axes[0, 1])
+axes[0, 1].set_title('Q-Q Plot (Standardized Residuals)')
+
+# Square Root of Standardized Residuals vs Fitted Values
+sns.scatterplot(x=y_pred, y=sqrt_std_resid, ax=axes[1, 0])
+axes[1, 0].set_xlabel('Fitted Values')
+axes[1, 0].set_ylabel('Sqrt(Standardized Residuals)')
+axes[1, 0].set_title('Sqrt(Standardized Residuals) vs Fitted Values')
+
+# Residuals vs Leverage plot
+sns.scatterplot(x=leverage, y=residuals, ax=axes[1, 1])
+axes[1, 1].set_xlabel('Leverage')
+axes[1, 1].set_ylabel('Residuals')
+axes[1, 1].set_title('Residuals vs Leverage')
+
+plt.tight_layout()
+plt.savefig(os.path.join(OUTPUT_DIR, "diagnostic_plots.png"))
+plt.show()
