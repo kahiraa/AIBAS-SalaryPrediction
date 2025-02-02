@@ -1,0 +1,5 @@
+OLS Model Performance:
+Mean Absolute Error (MAE): 0.08371430464431268
+Mean Squared Error (MSE): 0.011404131653405113
+R-squared (R²): 0.7458708139552196
+Root Mean Squared Error (RMSE): 0.1067901290073437

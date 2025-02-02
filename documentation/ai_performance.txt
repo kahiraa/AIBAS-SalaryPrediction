@@ -1,0 +1,5 @@
+AI Model Performance:
+Mean Absolute Error (MAE): 0.059719896947596066
+Mean Squared Error (MSE): 0.0064186450244400626
+R-squared (R²): 0.8569671865297793
+Root Mean Squared Error (RMSE): 0.08011644665385542
