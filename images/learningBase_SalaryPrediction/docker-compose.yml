@@ -3,9 +3,11 @@ version: '3.8'
 services:
   learning_base:
     image: learningbase_salaryprediction
+    container_name: learningbase_salaryprediction
     volumes:
       - ai_system:/tmp
     restart: always
 
 volumes:
   ai_system:
+    external: true

@@ -1,0 +1,15 @@
+# Use BusyBox as the base image
+FROM busybox
+
+# Set the working directory
+WORKDIR /knowledgeBase
+
+# Copy the AI/OLS models into the container
+COPY ../documentation/currentOlsSolution.pkl /knowledgeBase/AI/
+COPY ../documentation/currentAiSolution.keras /knowledgeBase/OLS/
+
+# Copy README file for documentation
+COPY README.md /knowledgeBase/README.md
+
+
+

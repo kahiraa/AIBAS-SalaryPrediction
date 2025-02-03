@@ -1,0 +1,10 @@
+# Use BusyBox as the base image
+FROM busybox
+
+# Set the working directory
+WORKDIR /codeBase
+
+
+# Copy README file for documentation
+COPY README.md /codeBase/README.md
+

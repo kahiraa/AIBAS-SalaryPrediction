@@ -10,3 +10,4 @@ COPY ../data/test_data.csv /tmp/learningBase/validation/
 
 # Copy the README.md for documentation
 COPY README.md /tmp/learningBase/README.md
+

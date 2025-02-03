@@ -1,11 +1,12 @@
 # Use busybox as the base image
 FROM busybox
 
-# Create the necessary directory inside the container
-RUN mkdir -p /tmp/activationBase
+# Create the necessary directories inside the container
+WORKDIR /activationBase
 
-# Copy the activation_data.csv file into the container
-COPY ../data/activation_data.csv /tmp/activationBase/
+# Copy the CSV files into the container
+COPY ../data/activation_data.csv /activationBase/
 
 # Copy the README.md for documentation
-COPY README.md /tmp/activationBase/README.md
+COPY README.md /activationBase/README.md
+

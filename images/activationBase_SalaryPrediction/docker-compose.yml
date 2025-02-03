@@ -1,11 +1,17 @@
-version: '3.8'
-
+version: "3.9"
 services:
   activation_base:
+    build: .
     image: activationbase_salaryprediction
+    container_name: activationbase_salaryprediction
     volumes:
-      - ai_system:/tmp
-    restart: always
-
+       - ai_system:/tmp
+    command:
+    - sh
+    - "-c"
+    - |
+      rm -rf /tmp/activationBase/ && cp -r /activationBase/ /tmp/;
+    
 volumes:
   ai_system:
+    external: true
