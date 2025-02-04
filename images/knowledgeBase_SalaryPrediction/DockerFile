@@ -5,8 +5,8 @@ FROM busybox
 WORKDIR /knowledgeBase
 
 # Copy the AI/OLS models into the container
-COPY ../documentation/currentOlsSolution.pkl /knowledgeBase/AI/
-COPY ../documentation/currentAiSolution.keras /knowledgeBase/OLS/
+COPY ../documentation/currentOlsSolution.pkl /knowledgeBase/OLS/
+COPY ../documentation/currentAiSolution.keras /knowledgeBase/AI/
 
 # Copy README file for documentation
 COPY README.md /knowledgeBase/README.md

@@ -15,7 +15,7 @@ y = data["Salary"]
 X = sm.add_constant(X, has_constant='add')
 print("Shape of X after adding constant:", X.shape)
 
-with open("/tmp/knowledgeBase/currentOlsSolution.pkl", "rb") as f:
+with open("/tmp/knowledgeBase/OLS/currentOlsSolution.pkl", "rb") as f:
     ols_model = pickle.load(f)
 
 print("Shape of X:", X.shape)

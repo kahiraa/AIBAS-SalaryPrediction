@@ -1,0 +1,29 @@
+version: '3'
+services:
+  activation_base:
+    image: activationbase_salaryprediction
+    container_name: activationbase_container
+    volumes:
+      - ai_system:/tmp
+
+  knowledge_base:
+    image: knowledgebase_salaryprediction
+    container_name: knowledgebase_container
+    volumes:
+      - ai_system:/tmp
+    depends_on:
+      - activation_base
+
+  code_base:
+    image: codebase_salaryprediction
+    container_name: codebase_container
+    volumes:
+      - ai_system:/tmp
+    depends_on:
+      - activation_base
+      - knowledge_base
+    command: ["python", "/tmp/codeBase/RunOLSModel.py"]
+
+volumes:
+  ai_system:
+    external: true
