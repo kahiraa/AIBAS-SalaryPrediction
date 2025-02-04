@@ -36,7 +36,8 @@ ols_results = ols_model.fit()
 
 model_path = "documentation/currentOlsSolution.pkl"
 with open(model_path, "wb") as f:
-    pickle.dump(ols_model, f)
+    #pickle.dump(ols_model, f)
+    pickle.dump(ols_results, f)
 
 print(ols_results.summary())
 

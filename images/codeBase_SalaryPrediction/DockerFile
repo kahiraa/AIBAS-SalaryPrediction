@@ -3,6 +3,8 @@ WORKDIR /codeBase
 
 COPY /images/codeBase_SalaryPrediction/RunAIModel.py /codeBase/RunAIModel.py
 
-RUN pip install --no-cache-dir numpy pandas tensorflow==2.18.0 keras
+COPY /images/codeBase_SalaryPrediction/RunOLSModel.py /codeBase/RunOLSModel.py
 
-CMD ["python", "/tmp/codeBase/RunAIModel.py"]
+RUN pip install --no-cache-dir numpy pandas tensorflow==2.18.0 keras statsmodels
+
+CMD ["sh", "-c", "python /codeBase/RunAIModel.py && python /codeBase/RunOLSModel.py"]

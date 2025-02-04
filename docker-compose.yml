@@ -1,17 +1,29 @@
-version: '3.8'
-
+version: '3'
 services:
-  learning_base:
-    image: learningbase_salaryprediction
-    volumes:
-      - ai_system:/tmp
-    restart: always
-
   activation_base:
     image: activationbase_salaryprediction
+    container_name: activationbase_container
     volumes:
       - ai_system:/tmp
-    restart: always
+
+  knowledge_base:
+    image: knowledgebase_salaryprediction
+    container_name: knowledgebase_container
+    volumes:
+      - ai_system:/tmp
+    depends_on:
+      - activation_base
+
+  code_base:
+    image: codebase_salaryprediction
+    container_name: codebase_container
+    volumes:
+      - ai_system:/tmp
+    depends_on:
+      - activation_base
+      - knowledge_base
+    command: ["python", "/tmp/codeBase/RunAIModel.py"]
 
 volumes:
   ai_system:
+    external: true

@@ -12,6 +12,7 @@ services:
     - |
       rm -rf /tmp/codeBase/ && cp -r /codeBase/ /tmp/;
     - "python /codeBase/RunAIModel.py"
+    - "python /codeBase/RunOLSModel.py"
 volumes:
   ai_system:
     external: true
